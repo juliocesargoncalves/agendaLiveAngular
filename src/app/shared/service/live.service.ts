@@ -29,7 +29,4 @@ export class LiveService {
     return this.httpClient.post<any>(this.apiUrl, live, this.httpOptions);
    }
 
-   public createLive(){
-
-   }
 }

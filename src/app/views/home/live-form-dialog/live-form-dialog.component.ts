@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import * as moment from 'moment';
 import { LiveService } from 'src/app/shared/service/live.service';
 
 @Component({
@@ -22,7 +23,7 @@ export class LiveFormDialogComponent implements OnInit {
     this.liveForm = this.fb.group({
       liveName : ['', [Validators.required]],
       channelName : ['', [Validators.required]],
-      liveDate : ['2021-08-01T20:00:00', [Validators.required]],
+      liveDate : ['', [Validators.required]],
       liveTime : ['', [Validators.required]],
       liveLink : ['', [Validators.required]],
 
@@ -30,9 +31,12 @@ export class LiveFormDialogComponent implements OnInit {
   }
 
   createLive(){
+    let newDate : moment.Moment = moment.utc(this.liveForm.value.liveDate).local();
+    this.liveForm.value.liveDate = newDate.format("YYYY-MM-DD") + "T" + this.liveForm.value.liveTime;
     this.rest.postLives(this.liveForm.value).subscribe(result => {});
     this.dialogRef.close();
     this.liveForm.reset();
+    location.reload();
   }
 
   cancel(): void {
